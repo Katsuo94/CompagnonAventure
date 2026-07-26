@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=0.67, maximum-scale=0.67, minimum-scale=0.67, user-scalable=no, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
   <title>Compagnon d’Aventure — Créé par Katsuo</title>
 
   <!-- PWA : installation en plein écran depuis l'écran d'accueil -->
@@ -89,6 +89,12 @@
     }
 
     .hidden { display: none !important; }
+
+    /* Zoom réduit uniquement à l'intérieur de l'app (Personnage/Inventaire/Dés/Croquis) ;
+       la page de garde (#homeScreen) garde sa taille d'origine. */
+    #appScreen {
+      zoom: 0.67;
+    }
 
     .home-screen {
       flex: 1;
@@ -569,6 +575,13 @@
       transform: translateY(-1px);
     }
 
+    .primary-btn:disabled,
+    .ghost-btn:disabled {
+      opacity: 0.4;
+      pointer-events: none;
+      transform: none;
+    }
+
     .primary-btn,
     .home-btn {
       padding: 12px 16px;
@@ -600,13 +613,52 @@
       margin-top: 12px;
     }
 
-    .dice-stage {
+    .dice-tray {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
       gap: 14px;
       width: 100%;
-      max-width: 340px;
       margin: 14px auto 0;
+    }
+
+    .die-card {
+      display: grid;
+      gap: 8px;
+      justify-items: center;
+    }
+
+    .die-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 145px;
+      padding: 0 2px;
+    }
+
+    .die-card-label {
+      font-family: "Cinzel", serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+    }
+
+    .die-checkbox {
+      display: inline-flex;
+      cursor: pointer;
+    }
+
+    .die-checkbox input {
+      width: 17px;
+      height: 17px;
+      accent-color: var(--gold);
+      margin: 0;
+    }
+
+    .die-number {
+      font-family: "Cinzel", serif;
+      font-size: 1.9rem;
+      color: var(--accent);
     }
 
     .die {
@@ -629,12 +681,6 @@
     }
 
     .die.rolling { animation: dice-rotate 1.05s ease forwards; }
-
-    .dice-stage.hidden { display: none; }
-
-    .cube-stage {
-      perspective: 700px;
-    }
 
     .cube-scene {
       perspective: 700px;
@@ -724,6 +770,70 @@
     .dice-style-option-desc {
       font-size: 0.8rem;
       color: var(--muted);
+    }
+
+    .dice-pool-config {
+      display: grid;
+      gap: 8px;
+    }
+
+    .dice-pool-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .dice-pool-label {
+      font-family: "Cinzel", serif;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    .dice-pool-count {
+      min-width: 22px;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .dice-set-save-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .dice-set-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .dice-set-info { min-width: 0; }
+
+    .dice-set-name {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.92rem;
+    }
+
+    .dice-set-summary {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .dice-set-actions {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
     }
 
     .pip-grid {
@@ -1370,37 +1480,7 @@
                     </div>
                   </div>
 
-                  <div class="dice-stage" id="classicDiceStage">
-                    <div class="die" id="die1" aria-label="Dé numéro 1">
-                      <div class="pip-grid"></div>
-                    </div>
-                    <div class="die" id="die2" aria-label="Dé numéro 2">
-                      <div class="pip-grid"></div>
-                    </div>
-                  </div>
-
-                  <div class="dice-stage cube-stage hidden" id="cubeStage">
-                    <div class="cube-scene" id="die1CubeScene">
-                      <div class="cube3d" id="die1Cube">
-                        <div class="cube-face cube-face-1"><div class="pip-grid"></div></div>
-                        <div class="cube-face cube-face-2"><div class="pip-grid"></div></div>
-                        <div class="cube-face cube-face-3"><div class="pip-grid"></div></div>
-                        <div class="cube-face cube-face-4"><div class="pip-grid"></div></div>
-                        <div class="cube-face cube-face-5"><div class="pip-grid"></div></div>
-                        <div class="cube-face cube-face-6"><div class="pip-grid"></div></div>
-                      </div>
-                    </div>
-                    <div class="cube-scene" id="die2CubeScene">
-                      <div class="cube3d" id="die2Cube">
-                        <div class="cube-face cube-face-1"><div class="pip-grid"></div></div>
-                        <div class="cube-face cube-face-2"><div class="pip-grid"></div></div>
-                        <div class="cube-face cube-face-3"><div class="pip-grid"></div></div>
-                        <div class="cube-face cube-face-4"><div class="pip-grid"></div></div>
-                        <div class="cube-face cube-face-5"><div class="pip-grid"></div></div>
-                        <div class="cube-face cube-face-6"><div class="pip-grid"></div></div>
-                      </div>
-                    </div>
-                  </div>
+                  <div class="dice-tray" id="diceTray"></div>
 
                   <div class="dice-result">
                     <div id="diceTotal" class="dice-total">—</div>
@@ -1408,8 +1488,8 @@
                   </div>
 
                   <div class="inline-actions" style="justify-content:center; flex-wrap: wrap;">
-                    <button id="rollOneBtn" class="primary-btn" type="button">Lancer un dé</button>
-                    <button id="rollTwoBtn" class="primary-btn" type="button">Lancer deux dés</button>
+                    <button id="rollAllBtn" class="primary-btn" type="button">Tout lancer</button>
+                    <button id="rollSelectedBtn" class="ghost-btn" type="button">Lancer la sélection</button>
                   </div>
                 </div>
               </div>
@@ -1464,7 +1544,7 @@
       </section>
 
       <div id="diceSettingsModal" class="modal-overlay" aria-hidden="true">
-        <div class="modal">
+        <div class="modal field-settings-modal">
           <h2 class="modal-title">Personnaliser les dés</h2>
           <p class="modal-text">Choisissez le style d'animation utilisé lors du lancer.</p>
 
@@ -1479,8 +1559,8 @@
             <label class="dice-style-option">
               <input type="radio" name="diceStyle" value="cube3d" />
               <div class="dice-style-option-text">
-                <div class="dice-style-option-title">Animation 3D</div>
-                <div class="dice-style-option-desc">Un dé en volume bascule sur lui-même avant de s'arrêter sur le résultat.</div>
+                <div class="dice-style-option-title">Animation 3D (D6 uniquement)</div>
+                <div class="dice-style-option-desc">Un dé en volume bascule sur lui-même avant de s'arrêter sur le résultat. Les D4/D8/D10/D12/D20 restent en animation classique.</div>
               </div>
             </label>
           </div>
@@ -1498,10 +1578,22 @@
               <input type="checkbox" id="diceShakeToggle" />
               <div class="dice-style-option-text">
                 <div class="dice-style-option-title">Secouer pour lancer</div>
-                <div class="dice-style-option-desc">Secouez le téléphone sur cette page pour relancer automatiquement (dernier nombre de dés utilisé). Sur iPhone, l'autorisation de mouvement peut être redemandée à chaque ouverture de l'app.</div>
+                <div class="dice-style-option-desc">Secouez le téléphone sur cette page pour reproduire automatiquement votre dernier lancer (tous les dés, ou la sélection). Sur iPhone, l'autorisation de mouvement peut être redemandée à chaque ouverture de l'app.</div>
               </div>
             </label>
           </div>
+
+          <h3 class="field-settings-subtitle">Composition des dés</h3>
+          <p class="modal-text">Choisissez combien de dés de chaque type sont présents sur la page.</p>
+          <div id="dicePoolConfig" class="dice-pool-config"></div>
+
+          <h3 class="field-settings-subtitle">Sets sauvegardés</h3>
+          <p class="modal-text">Enregistrez la composition ci-dessus comme set pour la retrouver plus tard sans tout reconfigurer.</p>
+          <div class="dice-set-save-row">
+            <input type="text" id="diceSetNameInput" placeholder="Nom du set (ex : Combat)" />
+            <button id="saveDiceSetBtn" class="ghost-btn" type="button">Enregistrer ce set</button>
+          </div>
+          <div id="diceSetsList" class="field-settings-list"></div>
 
           <div class="modal-actions">
             <button id="cancelDiceSettingsBtn" class="ghost-btn" type="button">Annuler</button>
@@ -1724,8 +1816,44 @@
         localStorage.setItem(DICE_SHAKE_KEY, enabled ? 'on' : 'off');
       }
       let diceShakeEnabled = loadDiceShake();
-      let lastDiceCount = 2;
       let diceRollInProgress = false;
+      let lastRollAction = 'all'; // 'all' | 'selected' — rejoué par le secouer-pour-lancer
+
+      const DIE_TYPES = ['d4', 'd6', 'd8', 'd10', 'd12', 'd20'];
+      const DIE_FACES = { d4: 4, d6: 6, d8: 8, d10: 10, d12: 12, d20: 20 };
+      const DIE_LABELS = { d4: 'D4', d6: 'D6', d8: 'D8', d10: 'D10', d12: 'D12', d20: 'D20' };
+
+      const DICE_POOL_KEY = 'compagnon_dice_pool_v1';
+      function loadDicePool() {
+        try {
+          const raw = JSON.parse(localStorage.getItem(DICE_POOL_KEY) || 'null');
+          if (raw && typeof raw === 'object') {
+            const pool = {};
+            DIE_TYPES.forEach(t => { pool[t] = Math.max(0, Math.min(20, parseInt(raw[t], 10) || 0)); });
+            return pool;
+          }
+        } catch {}
+        return { d4: 0, d6: 2, d8: 0, d10: 0, d12: 0, d20: 0 };
+      }
+      function saveDicePoolConfig(pool) {
+        localStorage.setItem(DICE_POOL_KEY, JSON.stringify(pool));
+      }
+      let dicePool = loadDicePool();
+      let dicePoolDraft = {};
+
+      const DICE_SETS_KEY = 'compagnon_dice_sets_v1';
+      function loadDiceSets() {
+        try {
+          const raw = JSON.parse(localStorage.getItem(DICE_SETS_KEY) || '[]');
+          return Array.isArray(raw) ? raw : [];
+        } catch {
+          return [];
+        }
+      }
+      function saveDiceSetsConfig(sets) {
+        localStorage.setItem(DICE_SETS_KEY, JSON.stringify(sets));
+      }
+      let diceSets = loadDiceSets();
 
       const homeScreen = document.getElementById('homeScreen');
       const appScreen = document.getElementById('appScreen');
@@ -1754,18 +1882,11 @@
       const inventoryList = document.getElementById('inventoryList');
       const clearInventoryBtn = document.getElementById('clearInventoryBtn');
 
-      const die1 = document.getElementById('die1');
-      const die2 = document.getElementById('die2');
+      const diceTray = document.getElementById('diceTray');
       const diceTotal = document.getElementById('diceTotal');
       const diceCaption = document.getElementById('diceCaption');
-      const rollOneBtn = document.getElementById('rollOneBtn');
-      const rollTwoBtn = document.getElementById('rollTwoBtn');
-      const classicDiceStage = document.getElementById('classicDiceStage');
-      const cubeStage = document.getElementById('cubeStage');
-      const die1Cube = document.getElementById('die1Cube');
-      const die2Cube = document.getElementById('die2Cube');
-      const die1CubeScene = document.getElementById('die1CubeScene');
-      const die2CubeScene = document.getElementById('die2CubeScene');
+      const rollAllBtn = document.getElementById('rollAllBtn');
+      const rollSelectedBtn = document.getElementById('rollSelectedBtn');
       const openDiceSettingsBtn = document.getElementById('openDiceSettingsBtn');
       const diceSettingsModal = document.getElementById('diceSettingsModal');
       const cancelDiceSettingsBtn = document.getElementById('cancelDiceSettingsBtn');
@@ -1773,6 +1894,10 @@
       const diceStyleRadios = document.querySelectorAll('input[name="diceStyle"]');
       const diceVibrationToggle = document.getElementById('diceVibrationToggle');
       const diceShakeToggle = document.getElementById('diceShakeToggle');
+      const dicePoolConfigEl = document.getElementById('dicePoolConfig');
+      const diceSetNameInput = document.getElementById('diceSetNameInput');
+      const saveDiceSetBtn = document.getElementById('saveDiceSetBtn');
+      const diceSetsListEl = document.getElementById('diceSetsList');
 
       const sessionModal = document.getElementById('sessionModal');
       const sessionModalTitle = document.getElementById('sessionModalTitle');
@@ -2496,54 +2621,173 @@
         });
       }
 
-      function randomDie() {
-        return Math.floor(Math.random() * 6) + 1;
+      function randomFace(sides) {
+        return Math.floor(Math.random() * sides) + 1;
       }
 
-      // ---- Style classique (tremblement + résultat) ----
-      function rollClassicDice(diceCount) {
-        die1.classList.add('rolling');
-        if (diceCount === 2) die2.classList.add('rolling');
-        diceTotal.textContent = '…';
-        diceCaption.textContent = 'Les dés roulent...';
+      // ========== PLATEAU DYNAMIQUE (composition libre de dés) ==========
+      let currentDiceInstances = [];
+      let diceSelection = {};
+      const diceCardEls = {};   // dés en tremblement classique (pips ou chiffre) → pour la classe 'rolling'
+      const diePipEls = {};     // D6 classique → élément portant le pip-grid
+      const diceCubeEls = {};   // D6 en 3D → élément .cube3d
+      const diceNumberEls = {}; // D4/D8/D10/D12/D20 → élément texte du chiffre
 
-        // Vibration "classique" : 3 impulsions régulières sur toute la durée du tremblement.
-        if (diceVibrationEnabled && 'vibrate' in navigator) {
-          navigator.vibrate([30, 370, 30, 370, 30]);
+      function buildDiceInstances(pool) {
+        const list = [];
+        DIE_TYPES.forEach(type => {
+          const n = pool[type] || 0;
+          for (let i = 0; i < n; i++) list.push({ id: `${type}-${i}`, type });
+        });
+        return list;
+      }
+
+      function createCubeFaces(cubeEl) {
+        for (let value = 1; value <= 6; value++) {
+          const face = document.createElement('div');
+          face.className = `cube-face cube-face-${value}`;
+          const grid = document.createElement('div');
+          grid.className = 'pip-grid';
+          face.appendChild(grid);
+          cubeEl.appendChild(face);
+          buildDieGrid(face);
+          renderDie(face, value);
         }
+      }
+
+      function buildDieCard(inst) {
+        const card = document.createElement('div');
+        card.className = 'die-card';
+        card.dataset.dieId = inst.id;
+
+        const top = document.createElement('div');
+        top.className = 'die-card-top';
+
+        const label = document.createElement('span');
+        label.className = 'die-card-label';
+        label.textContent = DIE_LABELS[inst.type];
+
+        const checkLabel = document.createElement('label');
+        checkLabel.className = 'die-checkbox';
+        const check = document.createElement('input');
+        check.type = 'checkbox';
+        check.checked = diceSelection[inst.id] !== false;
+        check.setAttribute('aria-label', `Inclure ${DIE_LABELS[inst.type]} dans la sélection`);
+        check.addEventListener('change', () => {
+          diceSelection[inst.id] = check.checked;
+          updateRollSelectedBtnState();
+        });
+        checkLabel.appendChild(check);
+
+        top.appendChild(label);
+        top.appendChild(checkLabel);
+        card.appendChild(top);
+
+        const useCube = inst.type === 'd6' && diceStyle === 'cube3d';
+
+        if (useCube) {
+          const scene = document.createElement('div');
+          scene.className = 'cube-scene';
+          const cube = document.createElement('div');
+          cube.className = 'cube3d';
+          scene.appendChild(cube);
+          card.appendChild(scene);
+          createCubeFaces(cube);
+          diceCubeEls[inst.id] = cube;
+        } else {
+          const die = document.createElement('div');
+          die.className = 'die';
+          die.setAttribute('aria-label', DIE_LABELS[inst.type]);
+
+          if (inst.type === 'd6') {
+            const grid = document.createElement('div');
+            grid.className = 'pip-grid';
+            die.appendChild(grid);
+            buildDieGrid(die);
+            renderDie(die, 1);
+            diePipEls[inst.id] = die;
+          } else {
+            const number = document.createElement('div');
+            number.className = 'die-number';
+            number.textContent = '1';
+            die.appendChild(number);
+            diceNumberEls[inst.id] = number;
+          }
+
+          card.appendChild(die);
+          diceCardEls[inst.id] = die;
+        }
+
+        return card;
+      }
+
+      function updateRollSelectedBtnState() {
+        const anySelected = currentDiceInstances.some(inst => diceSelection[inst.id]);
+        rollSelectedBtn.disabled = !anySelected;
+        rollAllBtn.disabled = !currentDiceInstances.length;
+      }
+
+      function rebuildDiceTray() {
+        currentDiceInstances = buildDiceInstances(dicePool);
+
+        const prevSelection = diceSelection;
+        diceSelection = {};
+        currentDiceInstances.forEach(inst => {
+          diceSelection[inst.id] = prevSelection[inst.id] !== undefined ? prevSelection[inst.id] : true;
+        });
+
+        Object.keys(diceCardEls).forEach(k => delete diceCardEls[k]);
+        Object.keys(diePipEls).forEach(k => delete diePipEls[k]);
+        Object.keys(diceCubeEls).forEach(k => delete diceCubeEls[k]);
+        Object.keys(diceNumberEls).forEach(k => delete diceNumberEls[k]);
+
+        diceTray.innerHTML = '';
+
+        if (!currentDiceInstances.length) {
+          const empty = document.createElement('div');
+          empty.className = 'field-settings-empty';
+          empty.textContent = 'Aucun dé configuré pour le moment. Ouvrez ⚙️ pour en ajouter.';
+          diceTray.appendChild(empty);
+        } else {
+          currentDiceInstances.forEach(inst => diceTray.appendChild(buildDieCard(inst)));
+        }
+
+        diceTotal.textContent = '—';
+        diceCaption.textContent = 'Touchez un bouton pour lancer';
+        updateRollSelectedBtnState();
+      }
+
+      // ---- Dés en tremblement classique (pips pour D6, chiffre pour les autres) ----
+      function renderDieFace(inst, value) {
+        if (inst.type === 'd6') {
+          renderDie(diePipEls[inst.id], value);
+        } else {
+          diceNumberEls[inst.id].textContent = value;
+        }
+      }
+
+      function rollClassicSingleDie(inst, onDone) {
+        const el = diceCardEls[inst.id];
+        el.classList.add('rolling');
+        const sides = DIE_FACES[inst.type];
 
         let count = 0;
         const flicker = setInterval(() => {
-          renderDie(die1, randomDie());
-          if (diceCount === 2) renderDie(die2, randomDie());
+          renderDieFace(inst, randomFace(sides));
           count++;
           if (count >= 8) clearInterval(flicker);
         }, 80);
 
         setTimeout(() => {
-          const a = randomDie();
-          renderDie(die1, a);
-          die1.classList.remove('rolling');
-
-          if (diceCount === 2) {
-            const b = randomDie();
-            renderDie(die2, b);
-            die2.classList.remove('rolling');
-            diceTotal.textContent = a + b;
-            diceCaption.textContent = `Résultat : ${a} + ${b}`;
-          } else {
-            diceTotal.textContent = a;
-            diceCaption.textContent = `Résultat : ${a}`;
-          }
-          diceRollInProgress = false;
+          const value = randomFace(sides);
+          renderDieFace(inst, value);
+          el.classList.remove('rolling');
+          onDone(value);
         }, 900);
       }
 
-      // ---- Style 3D (cube qui bascule sur lui-même) ----
-      const cubeRotationState = {
-        die1: { x: 0, y: 0 },
-        die2: { x: 0, y: 0 }
-      };
+      // ---- D6 en 3D (cube qui bascule sur lui-même) ----
+      const cubeRotationState = {};
 
       // Séquence d'à-coups pour simuler un vrai lancer : chaque étape couvre une part
       // décroissante de la rotation totale sur une durée croissante → l'effet ralentit
@@ -2569,7 +2813,9 @@
       }
 
       function tumbleCube(cubeEl, stateKey, startDelay) {
-        const value = randomDie();
+        if (!cubeRotationState[stateKey]) cubeRotationState[stateKey] = { x: 0, y: 0 };
+
+        const value = randomFace(6);
         const target = CUBE_FACE_TARGET[value];
         const cur = cubeRotationState[stateKey];
 
@@ -2594,14 +2840,12 @@
           const stepX = cur.x + totalDeltaX * cumX;
           const stepY = cur.y + totalDeltaY * cumY;
           // Durée de chaque étape légèrement aléatoire : la cadence n'est jamais
-          // identique deux lancers de suite, ni entre les deux dés.
+          // identique deux lancers de suite, ni entre les dés.
           const duration = Math.round(step.duration * (0.8 + Math.random() * 0.4));
 
           setTimeout(() => {
             cubeEl.style.transition = `transform ${duration}ms ${step.ease}`;
             cubeEl.style.transform = `rotateX(${stepX}deg) rotateY(${stepY}deg)`;
-            // Petit à-coup de vibration au démarrage de chaque étape : la cadence colle
-            // ainsi au ralentissement visuel du cube (impulsions de moins en moins fréquentes).
             if (vibrationOk) navigator.vibrate(step.pulse);
           }, startDelay + elapsed);
 
@@ -2609,7 +2853,7 @@
         });
 
         // Vibration finale, propre à CE dé, exactement quand SON animation se termine
-        // (les deux dés n'ayant pas forcément la même durée totale).
+        // (les dés n'ayant pas forcément la même durée totale).
         setTimeout(() => {
           if (vibrationOk) navigator.vibrate(CUBE_LANDING_PULSE);
         }, startDelay + elapsed);
@@ -2619,71 +2863,80 @@
         return { value, totalDuration: startDelay + elapsed };
       }
 
-      function rollCubeDice(diceCount) {
+      // ---- Orchestration d'un lancer (mélange libre de types et de styles) ----
+      function finalizeRoll(instances, results) {
+        const values = instances.map(inst => results[inst.id]);
+        const sum = values.reduce((a, b) => a + b, 0);
+
+        if (instances.length === 1) {
+          diceTotal.textContent = values[0];
+          diceCaption.textContent = `Résultat : ${DIE_LABELS[instances[0].type]} → ${values[0]}`;
+        } else {
+          diceTotal.textContent = sum;
+          const detail = instances.map((inst, i) => `${DIE_LABELS[inst.type]}:${values[i]}`).join(' + ');
+          diceCaption.textContent = `Résultat : ${detail} = ${sum}`;
+        }
+
+        diceRollInProgress = false;
+      }
+
+      function rollDiceGroup(instances) {
         diceTotal.textContent = '…';
         diceCaption.textContent = 'Les dés roulent...';
 
-        // Sur un double lancer, les deux dés ne "partent" jamais exactement en même
-        // temps — comme dans un vrai lancer à la main — et ce n'est pas toujours le
-        // même dé qui démarre en premier.
-        let delay1 = 0;
-        let delay2 = 0;
-        if (diceCount === 2) {
-          const stagger = 40 + Math.round(Math.random() * 160); // 40 à 200 ms
-          if (Math.random() < 0.5) delay2 = stagger; else delay1 = stagger;
+        const cubeInstances = instances.filter(inst => inst.type === 'd6' && diceStyle === 'cube3d');
+        const classicInstances = instances.filter(inst => !(inst.type === 'd6' && diceStyle === 'cube3d'));
+
+        // Vibration "classique" commune, seulement s'il y a au moins un dé en tremblement
+        // (les cubes 3D gèrent déjà leur propre vibration, à-coup par à-coup).
+        if (classicInstances.length && diceVibrationEnabled && 'vibrate' in navigator) {
+          navigator.vibrate([30, 370, 30, 370, 30]);
         }
 
-        const result1 = tumbleCube(die1Cube, 'die1', delay1);
-        const result2 = diceCount === 2 ? tumbleCube(die2Cube, 'die2', delay2) : null;
+        const results = {};
+        let pending = instances.length;
 
-        const waitFor = Math.max(result1.totalDuration, result2 ? result2.totalDuration : 0) + 60;
+        function checkDone() {
+          pending--;
+          if (pending === 0) finalizeRoll(instances, results);
+        }
 
-        setTimeout(() => {
-          if (diceCount === 2) {
-            diceTotal.textContent = result1.value + result2.value;
-            diceCaption.textContent = `Résultat : ${result1.value} + ${result2.value}`;
-          } else {
-            diceTotal.textContent = result1.value;
-            diceCaption.textContent = `Résultat : ${result1.value}`;
-          }
-          diceRollInProgress = false;
-        }, waitFor);
+        classicInstances.forEach(inst => {
+          rollClassicSingleDie(inst, value => {
+            results[inst.id] = value;
+            checkDone();
+          });
+        });
+
+        // Sur plusieurs D6 en 3D, léger décalage aléatoire de départ entre eux,
+        // comme dans un vrai lancer à la main (voir tumbleCube pour le détail).
+        cubeInstances.forEach(inst => {
+          const startDelay = cubeInstances.length > 1 ? Math.round(Math.random() * 220) : 0;
+          const result = tumbleCube(diceCubeEls[inst.id], inst.id, startDelay);
+          setTimeout(() => {
+            results[inst.id] = result.value;
+            checkDone();
+          }, result.totalDuration + 40);
+        });
       }
 
-      function rollDice(diceCount) {
+      function performRoll(action) {
         if (diceRollInProgress) return;
-        diceRollInProgress = true;
-        lastDiceCount = diceCount;
+        const instances = action === 'selected'
+          ? currentDiceInstances.filter(inst => diceSelection[inst.id])
+          : currentDiceInstances;
+        if (!instances.length) return;
 
-        if (diceStyle === 'cube3d') {
-          rollCubeDice(diceCount);
-        } else {
-          rollClassicDice(diceCount);
-        }
+        diceRollInProgress = true;
+        lastRollAction = action;
+        rollDiceGroup(instances);
       }
 
-      buildDieGrid(die1);
-      buildDieGrid(die2);
-      renderDie(die1, 1);
-      renderDie(die2, 1);
-
-      // Chaque face du cube affiche en permanence son propre nombre de points ;
-      // c'est la rotation du cube qui détermine le résultat visible.
-      [die1Cube, die2Cube].forEach(cube => {
-        for (let value = 1; value <= 6; value++) {
-          const face = cube.querySelector(`.cube-face-${value}`);
-          buildDieGrid(face);
-          renderDie(face, value);
-        }
-      });
-
-      rollOneBtn.addEventListener('click', () => rollDice(1));
-      rollTwoBtn.addEventListener('click', () => rollDice(2));
+      rollAllBtn.addEventListener('click', () => performRoll('all'));
+      rollSelectedBtn.addEventListener('click', () => performRoll('selected'));
 
       function applyDiceStyle() {
-        const isCube = diceStyle === 'cube3d';
-        classicDiceStage.classList.toggle('hidden', isCube);
-        cubeStage.classList.toggle('hidden', !isCube);
+        rebuildDiceTray();
       }
 
       // ---- Secouer le téléphone pour lancer ----
@@ -2710,7 +2963,7 @@
             !appScreen.classList.contains('hidden')
           ) {
             lastShakeTime = now;
-            rollDice(lastDiceCount);
+            performRoll(lastRollAction);
           }
         }
         lastShakeX = acc.x;
@@ -2760,12 +3013,134 @@
         enableShakeDetection();
       }
 
+      // ---- Composition des dés (steppers par type) ----
+      function renderDicePoolConfig() {
+        dicePoolConfigEl.innerHTML = '';
+        DIE_TYPES.forEach(type => {
+          const row = document.createElement('div');
+          row.className = 'dice-pool-row';
+
+          const label = document.createElement('div');
+          label.className = 'dice-pool-label';
+          label.textContent = DIE_LABELS[type];
+
+          const stepper = document.createElement('div');
+          stepper.className = 'stepper';
+
+          const minus = document.createElement('button');
+          minus.type = 'button';
+          minus.className = 'icon-btn';
+          minus.textContent = '−';
+          minus.setAttribute('aria-label', `Retirer un ${DIE_LABELS[type]}`);
+
+          const countSpan = document.createElement('span');
+          countSpan.className = 'dice-pool-count';
+          countSpan.textContent = dicePoolDraft[type];
+
+          const plus = document.createElement('button');
+          plus.type = 'button';
+          plus.className = 'icon-btn';
+          plus.textContent = '+';
+          plus.setAttribute('aria-label', `Ajouter un ${DIE_LABELS[type]}`);
+
+          minus.addEventListener('click', () => {
+            dicePoolDraft[type] = Math.max(0, dicePoolDraft[type] - 1);
+            countSpan.textContent = dicePoolDraft[type];
+          });
+          plus.addEventListener('click', () => {
+            dicePoolDraft[type] = Math.min(20, dicePoolDraft[type] + 1);
+            countSpan.textContent = dicePoolDraft[type];
+          });
+
+          stepper.appendChild(minus);
+          stepper.appendChild(countSpan);
+          stepper.appendChild(plus);
+          row.appendChild(label);
+          row.appendChild(stepper);
+          dicePoolConfigEl.appendChild(row);
+        });
+      }
+
+      // ---- Sets de dés sauvegardés ----
+      function summarizeDicePool(pool) {
+        const parts = DIE_TYPES.filter(t => pool[t] > 0).map(t => `${pool[t]}×${DIE_LABELS[t]}`);
+        return parts.length ? parts.join(', ') : 'Aucun dé';
+      }
+
+      function renderDiceSetsList() {
+        diceSetsListEl.innerHTML = '';
+        if (!diceSets.length) {
+          const empty = document.createElement('div');
+          empty.className = 'field-settings-empty';
+          empty.textContent = 'Aucun set enregistré pour le moment.';
+          diceSetsListEl.appendChild(empty);
+          return;
+        }
+
+        diceSets.forEach((set, index) => {
+          const row = document.createElement('div');
+          row.className = 'dice-set-item';
+
+          const info = document.createElement('div');
+          info.className = 'dice-set-info';
+          const name = document.createElement('div');
+          name.className = 'dice-set-name';
+          name.textContent = set.name;
+          const summary = document.createElement('div');
+          summary.className = 'dice-set-summary';
+          summary.textContent = summarizeDicePool(set.pool);
+          info.appendChild(name);
+          info.appendChild(summary);
+
+          const actions = document.createElement('div');
+          actions.className = 'dice-set-actions';
+
+          const loadBtn = document.createElement('button');
+          loadBtn.type = 'button';
+          loadBtn.className = 'ghost-btn';
+          loadBtn.textContent = 'Charger';
+          loadBtn.addEventListener('click', () => {
+            dicePoolDraft = { ...set.pool };
+            renderDicePoolConfig();
+          });
+
+          const deleteBtn = document.createElement('button');
+          deleteBtn.type = 'button';
+          deleteBtn.className = 'icon-btn';
+          deleteBtn.textContent = '×';
+          deleteBtn.setAttribute('aria-label', `Supprimer le set ${set.name}`);
+          deleteBtn.addEventListener('click', () => {
+            diceSets.splice(index, 1);
+            saveDiceSetsConfig(diceSets);
+            renderDiceSetsList();
+          });
+
+          actions.appendChild(loadBtn);
+          actions.appendChild(deleteBtn);
+          row.appendChild(info);
+          row.appendChild(actions);
+          diceSetsListEl.appendChild(row);
+        });
+      }
+
+      saveDiceSetBtn.addEventListener('click', () => {
+        const name = diceSetNameInput.value.trim();
+        if (!name) return;
+        diceSets.push({ id: genFieldId('dset'), name, pool: { ...dicePoolDraft } });
+        saveDiceSetsConfig(diceSets);
+        diceSetNameInput.value = '';
+        renderDiceSetsList();
+      });
+
       function openDiceSettingsModal() {
         diceStyleRadios.forEach(r => {
           r.checked = (r.value === diceStyle);
         });
         diceVibrationToggle.checked = diceVibrationEnabled;
         diceShakeToggle.checked = diceShakeEnabled;
+        dicePoolDraft = { ...dicePool };
+        renderDicePoolConfig();
+        renderDiceSetsList();
         diceSettingsModal.classList.add('open');
       }
 
@@ -2783,10 +3158,12 @@
         const selected = [...diceStyleRadios].find(r => r.checked);
         diceStyle = selected ? selected.value : 'classic';
         saveDiceStyleConfig(diceStyle);
-        applyDiceStyle();
 
         diceVibrationEnabled = diceVibrationToggle.checked;
         saveDiceVibrationConfig(diceVibrationEnabled);
+
+        dicePool = { ...dicePoolDraft };
+        saveDicePoolConfig(dicePool);
 
         if (diceShakeToggle.checked) {
           // Le clic sur "Enregistrer" est lui-même le geste utilisateur requis par iOS
@@ -2798,6 +3175,7 @@
           disableShakeDetection();
         }
 
+        applyDiceStyle();
         closeDiceSettingsModal();
       });
 
